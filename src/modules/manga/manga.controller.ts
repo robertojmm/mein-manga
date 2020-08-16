@@ -24,7 +24,7 @@ export class MangaController {
     return `Returned chapters of manga with id ${id}`;
   }
 
-  @Get(':id/chapters/:chapterNo')
+  @Get(':id/chapter/:chapterNo')
   getChapter(
     @Param('id') id: number,
     @Param('chapterNo') chapterNo: number,

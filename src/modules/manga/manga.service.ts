@@ -1,21 +1,32 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { Manga } from './manga.entity';
+import { Manga } from './entities/manga.entity';
+
+import { MangaRepository } from './manga.repository';
 
 import { MANGA_REPOSITORY_TOKEN } from '../../common/config/databaseTokens.constants';
+import { Repository } from 'typeorm';
+import { Chapter } from './entities/chapter.entity';
 
 @Injectable()
 export class MangaService {
   constructor(
     @Inject(MANGA_REPOSITORY_TOKEN)
-    private readonly mangaRepository: Repository<Manga>,
+    private readonly mangaRepository: MangaRepository, //private readonly mangaRepository: Repository<Manga>,
   ) {}
 
-  findAll(): Promise<Manga[]> {
-    return this.mangaRepository.find();
+  getMangas(): Promise<Manga[]> {
+    return this.mangaRepository.getMangas();
   }
 
-  findOne(id: number): Promise<Manga> {
-    return this.mangaRepository.findOne(id);
+  getManga(id: number): Promise<Manga> {
+    return this.mangaRepository.getManga(id);
+  }
+
+  getMangaWithChapters(id: number): Promise<Manga> {
+    return this.mangaRepository.getMangaWithChapters(id);
+  }
+
+  getChapter(id: number, chapterNo: number): Promise<Chapter> {
+    return this.mangaRepository.getChapter(id, chapterNo);
   }
 }

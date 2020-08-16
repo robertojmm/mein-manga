@@ -1,6 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { MangaService } from './manga.service';
-import { Manga } from './manga.entity';
+import { Manga } from './entities/manga.entity';
+import { Chapter } from './entities/chapter.entity';
 
 @Controller('manga')
 export class MangaController {
@@ -9,27 +10,26 @@ export class MangaController {
   @Get()
   async getMangas(): Promise<Manga[]> {
     //return manga list
-    return await this.mangaService.findAll();
+    return await this.mangaService.getMangas();
   }
 
   @Get(':id')
   async getManga(@Param('id') id: number): Promise<Manga> {
     //return general info about a specific manga
-    return await this.mangaService.findOne(id);
+    return await this.mangaService.getManga(id);
   }
 
   @Get(':id/chapters')
-  getChapters(@Param('id') id: number): string {
-    //return all chapters list of a manga
-    return `Returned chapters of manga with id ${id}`;
+  getChapters(@Param('id') id: number): Promise<Manga> {
+    return this.mangaService.getMangaWithChapters(id);
   }
 
   @Get(':id/chapter/:chapterNo')
   getChapter(
     @Param('id') id: number,
     @Param('chapterNo') chapterNo: number,
-  ): string {
+  ): Promise<Chapter> {
     //return specific chapter of a manga
-    return `Returned chapter ${chapterNo} of manga with id ${id}`;
+    return this.mangaService.getChapter(id, chapterNo);
   }
 }

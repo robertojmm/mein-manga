@@ -1,4 +1,4 @@
-import { ENV } from '../env/env.class';
+import { ENV } from '../../env/env.class';
 import { Provider } from '@nestjs/common';
 import { createConnection, Connection } from 'typeorm';
 import { DB_CONNECTION_TOKEN } from '../../common/config/databaseTokens.constants';

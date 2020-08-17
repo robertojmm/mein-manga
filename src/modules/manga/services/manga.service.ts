@@ -1,11 +1,11 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Manga } from './entities/manga.entity';
+import { Manga } from '../entities/manga.entity';
 
-import { MangaRepository } from './manga.repository';
+import { MangaRepository } from '../manga.repository';
 
-import { MANGA_REPOSITORY_TOKEN } from '../../common/config/databaseTokens.constants';
-import { Repository } from 'typeorm';
-import { Chapter } from './entities/chapter.entity';
+import { MANGA_REPOSITORY_TOKEN } from '../../../common/config/databaseTokens.constants';
+import { Chapter } from '../entities/chapter.entity';
+import { CreateMangaDto } from '../dto/createManga.dto';
 
 @Injectable()
 export class MangaService {
@@ -28,5 +28,9 @@ export class MangaService {
 
   getChapter(id: number, chapterNo: number): Promise<Chapter> {
     return this.mangaRepository.getChapter(id, chapterNo);
+  }
+
+  createManga(createMangaDto: CreateMangaDto): Promise<Manga> {
+    return this.mangaRepository.saveManga(createMangaDto);
   }
 }

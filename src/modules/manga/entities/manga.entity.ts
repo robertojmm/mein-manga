@@ -11,6 +11,7 @@ export class Manga {
 
   @Column({
     name: 'chapter_amount',
+    default: 0,
   })
   chapterAmount: number;
 

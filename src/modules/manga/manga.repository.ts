@@ -1,6 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
 import { Manga } from './entities/manga.entity';
 import { Chapter } from './entities/chapter.entity';
+import { CreateMangaDto } from './dto/createManga.dto';
 
 @EntityRepository(Manga)
 export class MangaRepository extends Repository<Manga> {
@@ -29,5 +30,9 @@ export class MangaRepository extends Repository<Manga> {
       .getOne()
       .then(manga => manga.chapters[0]);
     //.getSql()
+  }
+
+  saveManga(createMangaDto: CreateMangaDto): Promise<Manga> {
+    return this.save(createMangaDto);
   }
 }

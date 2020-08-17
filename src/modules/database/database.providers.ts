@@ -16,6 +16,7 @@ export const databaseProviders: Provider[] = [
         database: env.DB_DATABASE,
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         synchronize: true,
+
         //logging: 'all',
       });
     },

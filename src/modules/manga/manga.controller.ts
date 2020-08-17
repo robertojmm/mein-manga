@@ -1,11 +1,26 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { MangaService } from './manga.service';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Body,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { MangaService } from './services/manga.service';
 import { Manga } from './entities/manga.entity';
 import { Chapter } from './entities/chapter.entity';
+import { CreateMangaDto } from './dto/createManga.dto';
+import { NewChapterDto } from './dto/newChapter.dto';
+import { ChaptersService } from './services/chapters.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('manga')
 export class MangaController {
-  constructor(private readonly mangaService: MangaService) {}
+  constructor(
+    private readonly mangaService: MangaService,
+    private readonly chaptersService: ChaptersService,
+  ) {}
 
   @Get()
   async getMangas(): Promise<Manga[]> {
@@ -25,11 +40,30 @@ export class MangaController {
   }
 
   @Get(':id/chapter/:chapterNo')
-  getChapter(
+  async getChapter(
     @Param('id') id: number,
     @Param('chapterNo') chapterNo: number,
   ): Promise<Chapter> {
     //return specific chapter of a manga
-    return this.mangaService.getChapter(id, chapterNo);
+    return await this.mangaService.getChapter(id, chapterNo);
   }
+
+  @Post()
+  createManga(@Body() createMangaDto: CreateMangaDto): Promise<Manga> {
+    return this.mangaService.createManga(createMangaDto);
+  }
+
+  @Post(':id/chapters')
+  @UseInterceptors(FileInterceptor('file'))
+  newChapter(
+    @Param('id') id: number,
+    @Body() newChapterDto: NewChapterDto,
+    @UploadedFile() file: any,
+  ): any {
+    console.log(file);
+    console.log(id);
+    console.log(newChapterDto.number);
+    return this.chaptersService.saveChapter(id, newChapterDto);
+  }
+  return;
 }

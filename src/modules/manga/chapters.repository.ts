@@ -4,9 +4,8 @@ import { Manga } from './entities/manga.entity';
 
 @EntityRepository(Chapter)
 export class ChaptersRepository extends Repository<Chapter> {
-  public saveChapter(manga: Manga): any {
+  public saveChapter(manga: Manga): Promise<Chapter> {
     console.log(manga);
-    return;
     return this.save({
       manga,
     });

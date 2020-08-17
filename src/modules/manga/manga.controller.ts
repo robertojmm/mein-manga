@@ -59,7 +59,7 @@ export class MangaController {
     @Param('id') id: number,
     @Body() newChapterDto: NewChapterDto,
     @UploadedFile() file: any,
-  ): any {
+  ): Promise<Chapter> {
     console.log(file);
     console.log(id);
     console.log(newChapterDto.number);

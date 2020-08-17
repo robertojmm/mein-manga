@@ -6,6 +6,7 @@ import {
 import { ChaptersRepository } from '../chapters.repository';
 import { MangaRepository } from '../manga.repository';
 import { NewChapterDto } from '../dto/newChapter.dto';
+import { Chapter } from '../entities/chapter.entity';
 
 @Injectable()
 export class ChaptersService {
@@ -16,7 +17,7 @@ export class ChaptersService {
     private readonly mangaRepository: MangaRepository,
   ) {}
 
-  async saveChapter(mangaId: number, chapter: NewChapterDto) {
+  async saveChapter(mangaId: number, chapter: NewChapterDto): Promise<Chapter> {
     const manga = await this.mangaRepository.getManga(mangaId);
     return this.chaptersRepository.saveChapter(manga);
   }

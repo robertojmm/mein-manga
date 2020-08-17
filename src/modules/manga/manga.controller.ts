@@ -65,5 +65,4 @@ export class MangaController {
     console.log(newChapterDto.number);
     return this.chaptersService.saveChapter(id, newChapterDto);
   }
-  return;
 }

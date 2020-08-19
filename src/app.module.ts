@@ -12,6 +12,7 @@ import settings from './common/settings';
     UsersModule,
     MangaModule,
     EnvModule,
+    AuthModule,
     MulterModule.register({
       dest: settings.get('MANGA_FOLDER'), //'./files',
     }),
@@ -19,7 +20,6 @@ import settings from './common/settings';
       rootPath: settings.get('TEMP_FOLDER'),
       serveRoot: '/reading',
     }),
-    AuthModule,
   ],
   controllers: [],
   providers: [],

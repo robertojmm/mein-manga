@@ -8,7 +8,10 @@ import { ChaptersRepository } from '../chapters.repository';
 import { MangaRepository } from '../manga.repository';
 import { NewChapterDto } from '../dto/newChapter.dto';
 import { Chapter } from '../entities/chapter.entity';
-import { MangaNotFoundException } from 'src/common/exceptions';
+import {
+  MangaNotFoundException,
+  ChapterNotFoundException,
+} from 'src/common/exceptions';
 
 import * as AdmZip from 'adm-zip';
 import * as UnrarJs from 'unrar-js';
@@ -137,6 +140,10 @@ export class ChaptersService {
     const chapter = await this.chaptersRepository.searchChapter(
       preapareChapterDto,
     );
+
+    if (!chapter) {
+      throw new ChapterNotFoundException();
+    }
 
     this.extractChapterFile({
       filePath: chapter.filePath,

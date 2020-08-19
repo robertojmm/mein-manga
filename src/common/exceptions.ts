@@ -11,3 +11,15 @@ export class MangaNotFoundException extends HttpException {
     );
   }
 }
+
+export class ChapterNotFoundException extends HttpException {
+  constructor() {
+    super(
+      {
+        status: HttpStatus.NOT_FOUND,
+        error: 'Chapter not found',
+      },
+      HttpStatus.NOT_FOUND,
+    );
+  }
+}

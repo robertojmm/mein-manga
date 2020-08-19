@@ -4,6 +4,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { UsersModule } from './modules/users/users.module';
 import { MangaModule } from './modules/manga/manga.module';
 import { EnvModule } from './modules/env/env.module';
+import { AuthModule } from './modules/auth/auth.module';
 import settings from './common/settings';
 
 @Module({
@@ -18,6 +19,7 @@ import settings from './common/settings';
       rootPath: settings.get('TEMP_FOLDER'),
       serveRoot: '/reading',
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [],

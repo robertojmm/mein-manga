@@ -14,12 +14,11 @@ export class ChaptersRepository extends Repository<Chapter> {
   }
 
   public searchChapter(chapter: PrepareChapterDto): Promise<Chapter> {
-    return this.createQueryBuilder('chapter')
-      .select()
-      .where('chapter.manga = :id AND chapter.number = :number', {
-        id: chapter.mangaId,
+    return this.findOne({
+      where: {
+        manga: chapter.mangaId,
         number: chapter.chapterNo,
-      })
-      .getOne();
+      },
+    });
   }
 }

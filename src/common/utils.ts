@@ -6,7 +6,10 @@ export function writeFileSyncWithSafeName(
   name: string,
   file: any,
 ) {
-  const finalFileName = `${destination}/${name.replace('/', '_')}`;
+  const finalFileName = `${destination}/${
+    name.replace('/', '_')
+    //  .replace(' ', '_')
+  }`;
   fs.writeFileSync(finalFileName, file);
   return finalFileName;
 }

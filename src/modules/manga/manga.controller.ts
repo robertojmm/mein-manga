@@ -16,6 +16,7 @@ import { ChaptersService } from './services/chapters.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import settings from 'src/common/settings';
+import { PrepareChapterDto } from './dto/prepareChapter.dto';
 
 @Controller('manga')
 export class MangaController {
@@ -72,11 +73,12 @@ export class MangaController {
     @Body() newChapterDto: NewChapterDto,
     @UploadedFile() file: any,
   ): Promise<Chapter> {
-    console.log(
-      file,
-    ); /*
-    console.log(id);
-    console.log(newChapterDto.number); */
+    console.log(file);
     return this.chaptersService.saveChapter(id, newChapterDto, file);
+  }
+
+  @Post('prepareChapter')
+  prepareManga(@Body() prepareChapterDto: PrepareChapterDto): Promise<Chapter> {
+    return this.chaptersService.prepareChapter(prepareChapterDto);
   }
 }

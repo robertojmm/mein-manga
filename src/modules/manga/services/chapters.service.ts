@@ -13,7 +13,11 @@ import { MangaNotFoundException } from 'src/common/exceptions';
 import * as AdmZip from 'adm-zip';
 import * as UnrarJs from 'unrar-js';
 import settings from 'src/common/settings';
-import { writeFileSyncWithSafeName } from 'src/common/utils';
+import {
+  writeFileSyncWithSafeName,
+  createFolderIfNotExists,
+} from 'src/common/utils';
+import { PrepareChapterDto } from '../dto/prepareChapter.dto';
 
 @Injectable()
 export class ChaptersService {
@@ -35,19 +39,19 @@ export class ChaptersService {
       throw new MangaNotFoundException();
     }
 
-    const dest = `${file.destination}/${manga.name}/${file.originalname}`;
-    fs.renameSync(file.path, dest);
+    const folder = `${file.destination}/${manga.name}`;
+    createFolderIfNotExists(folder);
+    const filePath = `${folder}/${file.originalname}`;
+    fs.renameSync(file.path, filePath);
 
     const coverPath = this.extractChapterCover(
-      dest,
+      filePath,
       `${settings.get('COVERS_FOLDER')}/${manga.name}`,
     );
 
-    //Create Cover path
-
     return this.chaptersRepository.saveChapter(manga, {
       number: chapter.number,
-      filePath: dest,
+      filePath,
       coverPath,
     });
   }
@@ -65,19 +69,7 @@ export class ChaptersService {
     destination: string;
     onlyExtractCover?: boolean;
   }): string {
-    if (!options.onlyExtractCover) {
-      options.onlyExtractCover = false;
-      // Nessary??
-    }
-
-    // destination?
-    // JustExtractCover?
-
-    console.log(options.filePath);
-
-    if (!fs.existsSync(options.destination)) {
-      fs.mkdirSync(options.destination);
-    }
+    createFolderIfNotExists(options.destination);
 
     const location = options.filePath.endsWith('cbz')
       ? this.readZip(options)
@@ -123,12 +115,6 @@ export class ChaptersService {
   }): string {
     const files = UnrarJs.unrarSync(filePath);
 
-    /* const saveFile = (file: any) => {
-      const finalFileName = `${destination}/${file.filename.replace('/', '_')}`;
-      fs.writeFileSync(finalFileName, file.fileData);
-      return finalFileName;
-    }; */
-
     if (onlyExtractCover) {
       const file = files[0];
       return writeFileSyncWithSafeName(
@@ -142,5 +128,23 @@ export class ChaptersService {
       writeFileSyncWithSafeName(destination, file.filename, file.fileData),
     );
     return destination;
+  }
+
+  public async prepareChapter(
+    preapareChapterDto: PrepareChapterDto,
+  ): Promise<Chapter> {
+    const chapter = await this.chaptersRepository.searchChapter(
+      preapareChapterDto,
+    );
+
+    this.extractChapterFile({
+      filePath: chapter.filePath,
+      destination: settings.get('TEMP_FOLDER'),
+    });
+
+    // Create URLS to each page
+
+    // Should store wich manga is actually reading??? (to avoid multiple extractions)
+    return chapter;
   }
 }

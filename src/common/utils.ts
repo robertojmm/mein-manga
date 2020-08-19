@@ -10,3 +10,9 @@ export function writeFileSyncWithSafeName(
   fs.writeFileSync(finalFileName, file);
   return finalFileName;
 }
+
+export function createFolderIfNotExists(folderName: string): void {
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
+  }
+}

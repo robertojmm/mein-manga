@@ -14,6 +14,8 @@ import { CreateMangaDto } from './dto/createManga.dto';
 import { NewChapterDto } from './dto/newChapter.dto';
 import { ChaptersService } from './services/chapters.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import settings from 'src/common/settings';
 
 @Controller('manga')
 export class MangaController {
@@ -54,15 +56,27 @@ export class MangaController {
   }
 
   @Post(':id/chapters')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: settings.get('MANGA_FOLDER'),
+        filename: (req, file, callback) => {
+          callback(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   newChapter(
     @Param('id') id: number,
     @Body() newChapterDto: NewChapterDto,
     @UploadedFile() file: any,
   ): Promise<Chapter> {
-    console.log(file);
+    console.log(
+      file,
+    ); /*
     console.log(id);
-    console.log(newChapterDto.number);
-    return this.chaptersService.saveChapter(id, newChapterDto);
+    console.log(newChapterDto.number); */
+    return this.chaptersService.saveChapter(id, newChapterDto, file);
   }
 }

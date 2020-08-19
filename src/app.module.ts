@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
 import { MangaModule } from './modules/manga/manga.module';
 import { EnvModule } from './modules/env/env.module';
+import settings from './common/settings';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { EnvModule } from './modules/env/env.module';
     MangaModule,
     EnvModule,
     MulterModule.register({
-      dest: './files',
+      dest: settings.get('MANGA_FOLDER'), //'./files',
     }),
   ],
   controllers: [AppController],

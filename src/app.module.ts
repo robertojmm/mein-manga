@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MulterModule } from '@nestjs/platform-express';
+import { ServeStaticModule } from '@nestjs/serve-static';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './modules/users/users.module';
@@ -14,6 +15,10 @@ import settings from './common/settings';
     EnvModule,
     MulterModule.register({
       dest: settings.get('MANGA_FOLDER'), //'./files',
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: settings.get('TEMP_FOLDER'),
+      serveRoot: '/reading',
     }),
   ],
   controllers: [AppController],

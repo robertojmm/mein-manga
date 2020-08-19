@@ -24,6 +24,7 @@
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/platform-express": "^7.4.2",
+    "@nestjs/serve-static": "^2.1.3",
     "@nestjs/typeorm": "^7.1.0",
     "adm-zip": "^0.4.16",
     "class-transformer": "^0.3.1",

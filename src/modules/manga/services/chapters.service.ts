@@ -18,6 +18,7 @@ import {
   createFolderIfNotExists,
 } from 'src/common/utils';
 import { PrepareChapterDto } from '../dto/prepareChapter.dto';
+import { UpdateChapterProgressDto } from '../dto/updateChapterProgress.dto';
 
 @Injectable()
 export class ChaptersService {
@@ -132,7 +133,7 @@ export class ChaptersService {
 
   public async prepareChapter(
     preapareChapterDto: PrepareChapterDto,
-  ): Promise<Chapter> {
+  ): Promise<string[]> {
     const chapter = await this.chaptersRepository.searchChapter(
       preapareChapterDto,
     );
@@ -143,8 +144,16 @@ export class ChaptersService {
     });
 
     // Create URLS to each page
+    const pages = fs.readdirSync(settings.get('TEMP_FOLDER'));
+    return pages.map(page => `//localhost:3000/reading/${page}`);
 
     // Should store wich manga is actually reading??? (to avoid multiple extractions)
-    return chapter;
+  }
+
+  public updateChapterProgress(
+    updateChapterProgressDto: UpdateChapterProgressDto,
+  ) {
+    console.log(updateChapterProgressDto);
+    //Need to create auth and users to continue.
   }
 }

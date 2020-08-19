@@ -17,6 +17,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import settings from 'src/common/settings';
 import { PrepareChapterDto } from './dto/prepareChapter.dto';
+import { UpdateChapterProgressDto } from './dto/updateChapterProgress.dto';
 
 @Controller('manga')
 export class MangaController {
@@ -78,7 +79,15 @@ export class MangaController {
   }
 
   @Post('prepareChapter')
-  prepareManga(@Body() prepareChapterDto: PrepareChapterDto): Promise<Chapter> {
+  prepareChapter(
+    @Body() prepareChapterDto: PrepareChapterDto,
+  ): Promise<string[]> {
     return this.chaptersService.prepareChapter(prepareChapterDto);
+  }
+
+  @Post('updateChapterProgress')
+  updateChapterProgress(@Body() body: UpdateChapterProgressDto): Promise<void> {
+    this.chaptersService.updateChapterProgress(body);
+    return Promise.resolve();
   }
 }

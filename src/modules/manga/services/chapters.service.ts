@@ -38,7 +38,7 @@ export class ChaptersService {
     chapter: NewChapterDto,
     file: any,
   ): Promise<Chapter> {
-    const manga = await this.mangaRepository.getManga(mangaId);
+    const manga = await this.mangaRepository.getMangaById(mangaId);
     if (!manga) {
       throw new MangaNotFoundException();
     }

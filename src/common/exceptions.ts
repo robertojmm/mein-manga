@@ -12,6 +12,15 @@ export class MangaNotFoundException extends HttpException {
   }
 }
 
+export class MangaAlreadyExistsException extends HttpException {
+  constructor() {
+    super(
+      { status: HttpStatus.CONFLICT, error: 'Manga already exists' },
+      HttpStatus.CONFLICT,
+    );
+  }
+}
+
 export class ChapterNotFoundException extends HttpException {
   constructor() {
     super(

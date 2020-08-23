@@ -7,7 +7,11 @@ import { MANGA_REPOSITORY_TOKEN } from '../../../common/config/databaseTokens.co
 import { Chapter } from '../entities/chapter.entity';
 import { CreateMangaDto } from '../dto/createManga.dto';
 import { ChaptersService } from './chapters.service';
-import { MangaNotFoundException } from 'src/common/exceptions';
+import {
+  MangaNotFoundException,
+  MangaAlreadyExistsException,
+  ChapterNotFoundException,
+} from 'src/common/exceptions';
 
 @Injectable()
 export class MangaService {
@@ -21,19 +25,46 @@ export class MangaService {
     return this.mangaRepository.getMangas();
   }
 
-  getManga(id: number): Promise<Manga> {
-    return this.mangaRepository.getManga(id);
+  public async getManga(id: number): Promise<Manga> {
+    const manga = await this.mangaRepository.getMangaById(id);
+
+    if (!manga) {
+      throw new MangaNotFoundException();
+    }
+
+    return manga;
   }
 
-  getMangaWithChapters(id: number): Promise<Manga> {
-    return this.mangaRepository.getMangaWithChapters(id);
+  public async getMangaWithChapters(id: number): Promise<Manga> {
+    const manga = await this.mangaRepository.getMangaWithChapters(id);
+
+    if (!manga) {
+      throw new MangaNotFoundException();
+    }
+
+    return manga;
   }
 
-  getChapter(id: number, chapterNo: number): Promise<Chapter> {
-    return this.mangaRepository.getChapter(id, chapterNo);
+  public async getChapter(id: number, chapterNo: number): Promise<Chapter> {
+    const chapter = await this.mangaRepository.getChapter(id, chapterNo);
+
+    if (!chapter) {
+      throw new ChapterNotFoundException();
+      // TODO not working, give it a look
+    }
+
+    return chapter;
   }
 
-  createManga(createMangaDto: CreateMangaDto): Promise<Manga> {
+  public async createManga(createMangaDto: CreateMangaDto): Promise<Manga> {
+    const manga = await this.mangaRepository.getMangaByName(
+      createMangaDto.name,
+    );
+
+    if (manga) {
+      throw new MangaAlreadyExistsException();
+    }
+
     return this.mangaRepository.saveManga(createMangaDto);
   }
 

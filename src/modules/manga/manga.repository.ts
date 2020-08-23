@@ -9,8 +9,14 @@ export class MangaRepository extends Repository<Manga> {
     return this.find();
   }
 
-  public getManga(id: number): Promise<Manga> {
+  public getMangaById(id: number): Promise<Manga> {
     return this.findOne(id);
+  }
+
+  public getMangaByName(name: string): Promise<Manga> {
+    return this.findOne({
+      where: { name },
+    });
   }
 
   public getMangaWithChapters(id: number): Promise<Manga> {

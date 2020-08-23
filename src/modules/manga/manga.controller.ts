@@ -6,6 +6,7 @@ import {
   Body,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { MangaService } from './services/manga.service';
 import { Manga } from './entities/manga.entity';
@@ -18,8 +19,10 @@ import { diskStorage } from 'multer';
 import settings from 'src/common/settings';
 import { PrepareChapterDto } from './dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from './dto/updateChapterProgress.dto';
+import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 
 @Controller('manga')
+@UseGuards(JwtAuthGuard)
 export class MangaController {
   constructor(
     private readonly mangaService: MangaService,

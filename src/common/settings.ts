@@ -10,6 +10,6 @@ const settings = new Configstore(
   { configPath: `${__dirname}/../settings.json` },
 );
 
-console.log(`${__dirname}/../settings.json`);
+console.log(`SETTINGS FILE PATH: ${__dirname}/../settings.json`);
 
 export default settings;

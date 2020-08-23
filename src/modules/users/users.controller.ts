@@ -1,23 +1,20 @@
-import { Controller, Inject, Get, Post, Put, Delete } from '@nestjs/common';
-import { USER_REPOSITORY_TOKEN } from 'src/common/config/databaseTokens.constants';
-import { Repository } from 'typeorm';
-import { User } from './entities/user.entity';
+import { Controller, Get, Post, Put, Delete, Body } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { UserCreateDto } from './dto/userCreate.dto';
+import { UserCompleteDto } from './dto/userComplete.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(
-    @Inject(USER_REPOSITORY_TOKEN)
-    private readonly usersRepository: Repository<User>,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getAllUsers() {
-    console.log('xd');
+  getAllUsers(): Promise<UserCompleteDto[]> {
+    return this.usersService.getAllUsers();
   }
 
   @Post()
-  createUser() {
-    console.log('xd');
+  createUser(@Body() userCreateDto: UserCreateDto): Promise<UserCompleteDto> {
+    return this.usersService.create(userCreateDto);
   }
 
   @Put()

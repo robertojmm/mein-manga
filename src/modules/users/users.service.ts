@@ -3,7 +3,10 @@ import { User as UserEntity } from './entities/user.entity';
 import { UserDto } from './dto/user.dto';
 import * as bcrypt from 'bcrypt';
 import { UserCompleteDto } from './dto/userComplete.dto';
-import { USER_REPOSITORY_TOKEN } from 'src/common/config/databaseTokens.constants';
+import {
+  USER_REPOSITORY_TOKEN,
+  ROLE_REPOSITORY_TOKEN,
+} from 'src/common/config/databaseTokens.constants';
 import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/userCreate.dto';
 import {
@@ -11,13 +14,26 @@ import {
   UserNotFoundException,
 } from 'src/common/exceptions';
 import { UserUpdateDto } from './dto/userUpdate.dto';
+import { Role } from './entities/role.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject(USER_REPOSITORY_TOKEN)
     private readonly usersRepository: Repository<UserEntity>,
-  ) {}
+    @Inject(ROLE_REPOSITORY_TOKEN)
+    private readonly rolesRepository: Repository<Role>,
+  ) {
+    this.roles = [];
+    this.fetchRoles();
+  }
+
+  roles: Role[];
+
+  private async fetchRoles() {
+    this.roles = await this.rolesRepository.find();
+    console.log(this.roles);
+  }
 
   public async create(userDto: UserCreateDto): Promise<UserCompleteDto> {
     const user = await this.getUserByNameAndEmail(userDto);
@@ -25,10 +41,12 @@ export class UsersService {
       throw new UserAlreadyExistsException();
     }
 
-    const userEntity = Object.assign(new UserEntity(), userDto);
-    const { password } = userEntity;
+    const { roles, password, ...userDtoWithoutRoles } = userDto;
+
+    const userEntity = Object.assign(new UserEntity(), userDtoWithoutRoles);
 
     userEntity.password = this.encryptPassword(password);
+    userEntity.roles = roles.map(this.searchRoleEntity);
 
     const userEntitySaved = await this.usersRepository.save(userEntity);
     return new UserCompleteDto(userEntitySaved);
@@ -85,6 +103,7 @@ export class UsersService {
   public async getUserByName(name: string): Promise<UserEntity> {
     const userEntity = await this.usersRepository.findOne({
       where: { username: name },
+      relations: ['roles'],
     });
 
     return userEntity;
@@ -99,4 +118,8 @@ export class UsersService {
   private encryptPassword(password: string): string {
     return bcrypt.hashSync(password, 10);
   }
+
+  private searchRoleEntity = (role: string): Role => {
+    return this.roles.find(roleEntity => roleEntity.name === role);
+  };
 }

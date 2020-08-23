@@ -3,13 +3,14 @@ import { IAuthService } from './interfaces/IAuthService.interface';
 import { AuthDto } from './dto/auth.dto';
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
-import { USER_REPOSITORY_TOKEN } from 'src/common/config/databaseTokens.constants';
+import { ROLE_REPOSITORY_TOKEN } from 'src/common/config/databaseTokens.constants';
 import { Repository } from 'typeorm';
 import { UserNotFoundException } from 'src/common/exceptions';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { UserCompleteDto } from '../users/dto/userComplete.dto';
 import { JwtService } from '@nestjs/jwt';
+import { Role } from '../users/entities/role.entity';
 
 @Injectable()
 export class AuthService {
@@ -30,7 +31,12 @@ export class AuthService {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async login(user: UserCompleteDto): Promise<{ access_token: string }> {
-    const payload = { username: user.username, sub: user.uid };
+    //console.log(user);
+    const payload = {
+      username: user.username,
+      sub: user.uid,
+      roles: user.roles,
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };

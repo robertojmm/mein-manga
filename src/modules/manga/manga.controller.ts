@@ -20,8 +20,11 @@ import settings from 'src/common/settings';
 import { PrepareChapterDto } from './dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from './dto/updateChapterProgress.dto';
 import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
 
 @Controller('manga')
+@UseGuards(RolesGuard)
 @UseGuards(JwtAuthGuard)
 export class MangaController {
   constructor(
@@ -30,12 +33,14 @@ export class MangaController {
   ) {}
 
   @Get()
+  @Roles('user')
   async getMangas(): Promise<Manga[]> {
-    //return manga list
+    console.log('hola');
     return await this.mangaService.getMangas();
   }
 
   @Get(':id')
+  @Roles('user')
   async getManga(@Param('id') id: number): Promise<Manga> {
     //return general info about a specific manga
     return await this.mangaService.getManga(id);

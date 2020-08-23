@@ -77,6 +77,7 @@ export class MangaController {
       }),
     }),
   )
+  @Roles('admin')
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   newChapter(
     @Param('id') id: number,

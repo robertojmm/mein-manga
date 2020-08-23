@@ -35,23 +35,23 @@ export class MangaController {
   @Get()
   @Roles('user')
   async getMangas(): Promise<Manga[]> {
-    console.log('hola');
     return await this.mangaService.getMangas();
   }
 
   @Get(':id')
   @Roles('user')
   async getManga(@Param('id') id: number): Promise<Manga> {
-    //return general info about a specific manga
     return await this.mangaService.getManga(id);
   }
 
   @Get(':id/chapters')
+  @Roles('user')
   getChapters(@Param('id') id: number): Promise<Manga> {
     return this.mangaService.getMangaWithChapters(id);
   }
 
   @Get(':id/chapter/:chapterNo')
+  @Roles('user')
   async getChapter(
     @Param('id') id: number,
     @Param('chapterNo') chapterNo: number,
@@ -61,11 +61,12 @@ export class MangaController {
   }
 
   @Post()
+  @Roles('admin')
   createManga(@Body() createMangaDto: CreateMangaDto): Promise<Manga> {
     return this.mangaService.createManga(createMangaDto);
   }
 
-  @Post(':id/chapters')
+  @Post(':id/chapters') //TODO test roles here
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -87,6 +88,7 @@ export class MangaController {
   }
 
   @Post('prepareChapter')
+  @Roles('user')
   prepareChapter(
     @Body() prepareChapterDto: PrepareChapterDto,
   ): Promise<string[]> {
@@ -94,6 +96,7 @@ export class MangaController {
   }
 
   @Post('updateChapterProgress')
+  @Roles('user')
   updateChapterProgress(@Body() body: UpdateChapterProgressDto): Promise<void> {
     this.chaptersService.updateChapterProgress(body);
     return Promise.resolve();

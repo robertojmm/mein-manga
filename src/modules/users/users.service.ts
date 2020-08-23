@@ -28,11 +28,10 @@ export class UsersService {
     this.fetchRoles();
   }
 
-  roles: Role[];
+  private roles: Role[];
 
   private async fetchRoles() {
     this.roles = await this.rolesRepository.find();
-    console.log(this.roles);
   }
 
   public async create(userDto: UserCreateDto): Promise<UserCompleteDto> {

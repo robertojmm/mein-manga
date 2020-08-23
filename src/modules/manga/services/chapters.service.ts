@@ -135,10 +135,13 @@ export class ChaptersService {
   }
 
   public async prepareChapter(
-    preapareChapterDto: PrepareChapterDto,
+    //preapareChapterDto: PrepareChapterDto,
+    mangaId: number,
+    chapterNo: number,
   ): Promise<string[]> {
     const chapter = await this.chaptersRepository.searchChapter(
-      preapareChapterDto,
+      mangaId,
+      chapterNo,
     );
 
     if (!chapter) {
@@ -162,5 +165,25 @@ export class ChaptersService {
   ) {
     console.log(updateChapterProgressDto);
     //Need to create auth and users to continue.
+  }
+
+  public async deleteChapter({ mangaId, chapterNo }: PrepareChapterDto) {
+    const chapter = await this.chaptersRepository.searchChapter(
+      mangaId,
+      chapterNo,
+    );
+
+    if (!chapter) {
+      throw new ChapterNotFoundException();
+    }
+
+    this.deleteChapterFiles(chapter);
+
+    return this.chaptersRepository.delete(chapter);
+  }
+
+  public deleteChapterFiles(chapter: Chapter): void {
+    fs.unlinkSync(chapter.coverPath);
+    fs.unlinkSync(chapter.filePath);
   }
 }

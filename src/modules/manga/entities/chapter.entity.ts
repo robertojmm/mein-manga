@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
 import { Manga } from './manga.entity';
 
 @Entity({ name: 'CHAPTERS' })
@@ -19,7 +25,9 @@ export class Chapter {
   @ManyToOne(
     type => Manga,
     manga => manga.chapters,
+    { onDelete: 'CASCADE' },
   )
+  @JoinColumn()
   manga: Manga;
 
   @Column({

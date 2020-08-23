@@ -7,6 +7,7 @@ import {
   UseInterceptors,
   UploadedFile,
   UseGuards,
+  Delete,
 } from '@nestjs/common';
 import { MangaService } from './services/manga.service';
 import { Manga } from './entities/manga.entity';
@@ -43,6 +44,15 @@ export class MangaController {
   async getManga(@Param('id') id: number): Promise<Manga> {
     return await this.mangaService.getManga(id);
   }
+
+  @Delete('deleteManga/:id')
+  @Roles('admin')
+  deleteManga(@Param('id') id: number) {
+    console.log('deleting manga');
+    return this.mangaService.deleteManga(id);
+  }
+
+  ///////////// CHAPTERS /////////////
 
   @Get(':id/chapters')
   @Roles('user')
@@ -93,7 +103,10 @@ export class MangaController {
   prepareChapter(
     @Body() prepareChapterDto: PrepareChapterDto,
   ): Promise<string[]> {
-    return this.chaptersService.prepareChapter(prepareChapterDto);
+    return this.chaptersService.prepareChapter(
+      prepareChapterDto.mangaId,
+      prepareChapterDto.chapterNo,
+    );
   }
 
   @Post('updateChapterProgress')
@@ -101,5 +114,11 @@ export class MangaController {
   updateChapterProgress(@Body() body: UpdateChapterProgressDto): Promise<void> {
     this.chaptersService.updateChapterProgress(body);
     return Promise.resolve();
+  }
+
+  @Delete('chapters')
+  @Roles('admin')
+  deleteChapter(@Body() chapterDto: PrepareChapterDto) {
+    return this.chaptersService.deleteChapter(chapterDto);
   }
 }

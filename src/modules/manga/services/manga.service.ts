@@ -6,12 +6,15 @@ import { MangaRepository } from '../manga.repository';
 import { MANGA_REPOSITORY_TOKEN } from '../../../common/config/databaseTokens.constants';
 import { Chapter } from '../entities/chapter.entity';
 import { CreateMangaDto } from '../dto/createManga.dto';
+import { ChaptersService } from './chapters.service';
+import { MangaNotFoundException } from 'src/common/exceptions';
 
 @Injectable()
 export class MangaService {
   constructor(
     @Inject(MANGA_REPOSITORY_TOKEN)
-    private readonly mangaRepository: MangaRepository, //private readonly mangaRepository: Repository<Manga>,
+    private readonly mangaRepository: MangaRepository,
+    private readonly chaptersService: ChaptersService,
   ) {}
 
   getMangas(): Promise<Manga[]> {
@@ -32,5 +35,24 @@ export class MangaService {
 
   createManga(createMangaDto: CreateMangaDto): Promise<Manga> {
     return this.mangaRepository.saveManga(createMangaDto);
+  }
+
+  async deleteManga(id: number) {
+    const {
+      chapters,
+      ...manga
+    } = await this.mangaRepository.getMangaWithChapters(id);
+
+    if (!manga) {
+      throw new MangaNotFoundException();
+    }
+
+    if (chapters) {
+      chapters.forEach(chapter =>
+        this.chaptersService.deleteChapterFiles(chapter),
+      );
+    }
+
+    return this.mangaRepository.delete(manga);
   }
 }

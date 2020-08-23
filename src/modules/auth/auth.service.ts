@@ -30,7 +30,7 @@ export class AuthService {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   async login(user: UserCompleteDto): Promise<{ access_token: string }> {
-    const payload = { username: user.name, sub: user.uid };
+    const payload = { username: user.username, sub: user.uid };
     return {
       access_token: this.jwtService.sign(payload),
     };

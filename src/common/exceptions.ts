@@ -30,3 +30,12 @@ export class UserNotFoundException extends NotFoundException {
     super(msg);
   }
 }
+
+export class UserAlreadyExistsException extends HttpException {
+  constructor() {
+    super(
+      { status: HttpStatus.CONFLICT, error: 'User already exists' },
+      HttpStatus.CONFLICT,
+    );
+  }
+}

@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import {
   CHAPTER_REPOSITORY_TOKEN,
   MANGA_REPOSITORY_TOKEN,
-} from 'src/common/config/databaseTokens.constants';
+} from '../../../common/config/databaseTokens.constants';
 import { ChaptersRepository } from '../chapters.repository';
 import { MangaRepository } from '../manga.repository';
 import { NewChapterDto } from '../dto/newChapter.dto';
@@ -11,15 +11,15 @@ import { Chapter } from '../entities/chapter.entity';
 import {
   MangaNotFoundException,
   ChapterNotFoundException,
-} from 'src/common/exceptions';
+} from '../../../common/exceptions';
 
 import * as AdmZip from 'adm-zip';
 import * as UnrarJs from 'unrar-js';
-import settings from 'src/common/settings';
+import settings from '../../../common/settings';
 import {
   writeFileSyncWithSafeName,
   createFolderIfNotExists,
-} from 'src/common/utils';
+} from '../../../common/utils';
 import { PrepareChapterDto } from '../dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from '../dto/updateChapterProgress.dto';
 

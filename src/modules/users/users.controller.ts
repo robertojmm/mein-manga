@@ -12,7 +12,7 @@ import { UsersService } from './users.service';
 import { UserCreateDto } from './dto/userCreate.dto';
 import { UserCompleteDto } from './dto/userComplete.dto';
 import { UserUpdateDto } from './dto/userUpdate.dto';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 

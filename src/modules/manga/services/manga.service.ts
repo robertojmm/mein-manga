@@ -11,7 +11,7 @@ import {
   MangaNotFoundException,
   MangaAlreadyExistsException,
   ChapterNotFoundException,
-} from 'src/common/exceptions';
+} from '../../../common/exceptions';
 
 @Injectable()
 export class MangaService {

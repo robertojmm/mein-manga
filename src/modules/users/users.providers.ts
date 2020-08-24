@@ -3,7 +3,7 @@ import {
   USER_REPOSITORY_TOKEN,
   DB_CONNECTION_TOKEN,
   ROLE_REPOSITORY_TOKEN,
-} from 'src/common/config/databaseTokens.constants';
+} from '../../common/config/databaseTokens.constants';
 import { User } from './entities/user.entity';
 import { Role } from './entities/role.entity';
 

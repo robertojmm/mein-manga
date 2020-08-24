@@ -2,7 +2,7 @@ import { Connection, Repository } from 'typeorm';
 import {
   USER_REPOSITORY_TOKEN,
   DB_CONNECTION_TOKEN,
-} from 'src/common/config/databaseTokens.constants';
+} from '../../common/config/databaseTokens.constants';
 import { User } from '../users/entities/user.entity';
 
 export const AuthProviders = [

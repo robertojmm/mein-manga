@@ -6,13 +6,13 @@ import { UserCompleteDto } from './dto/userComplete.dto';
 import {
   USER_REPOSITORY_TOKEN,
   ROLE_REPOSITORY_TOKEN,
-} from 'src/common/config/databaseTokens.constants';
+} from '../../common/config/databaseTokens.constants';
 import { Repository } from 'typeorm';
 import { UserCreateDto } from './dto/userCreate.dto';
 import {
   UserAlreadyExistsException,
   UserNotFoundException,
-} from 'src/common/exceptions';
+} from '../../common/exceptions';
 import { UserUpdateDto } from './dto/userUpdate.dto';
 import { Role } from './entities/role.entity';
 

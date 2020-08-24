@@ -17,12 +17,12 @@ import { NewChapterDto } from './dto/newChapter.dto';
 import { ChaptersService } from './services/chapters.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import settings from 'src/common/settings';
+import settings from '../../common/settings';
 import { PrepareChapterDto } from './dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from './dto/updateChapterProgress.dto';
 import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { Roles } from '../../common/decorators/roles.decorator';
 
 @Controller('manga')
 @UseGuards(RolesGuard)

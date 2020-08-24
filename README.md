@@ -17,10 +17,11 @@ $ git clone https://github.com/robertojmm/mein-manga.git && cd mein-manga
 # Installing dependencies
 $ npm install
 ```
-
-```
-:exclamation::exclamation: Don't forget to edit src/env.ts with your credentials :exclamation::exclamation:
-```
+:exclamation:
+:exclamation:
+ Don't forget to edit src/env.ts with your credentials 
+:exclamation:
+:exclamation:
 
 ## Running the app
 

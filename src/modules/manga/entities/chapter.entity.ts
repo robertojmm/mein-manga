@@ -39,4 +39,7 @@ export class Chapter {
     name: 'cover_path',
   })
   coverPath: string;
+
+  @Column()
+  pages: number;
 }

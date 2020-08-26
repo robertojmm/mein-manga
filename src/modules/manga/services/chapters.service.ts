@@ -157,14 +157,16 @@ export class ChaptersService {
       chapter.number
     }`;
 
-    fs.mkdirSync(destination, {
-      recursive: true,
-    });
+    if (!this.isChapterPrepared(destination)) {
+      fs.mkdirSync(destination, {
+        recursive: true,
+      });
 
-    this.extractChapterFile({
-      filePath: chapter.filePath,
-      destination,
-    });
+      this.extractChapterFile({
+        filePath: chapter.filePath,
+        destination,
+      });
+    }
 
     // Create URLS to each page
     const pages = fs.readdirSync(destination);
@@ -172,12 +174,12 @@ export class ChaptersService {
       page =>
         `//${env.NEST_HOST}:${env.NEST_PORT}/reading/${chapter.manga.name}/${chapter.number}/${page}`,
     );
-
-    // Should store wich manga is actually reading??? (to avoid multiple extractions)
   }
 
-  private isChapterPrepared() {
+  private isChapterPrepared(chapterTempPath: string) {
     console.log('TODO');
+
+    return fs.existsSync(chapterTempPath);
     /*
     
     just check if exists folder

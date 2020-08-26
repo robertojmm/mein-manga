@@ -1,4 +1,5 @@
 export class ENV {
+  NEST_HOST: string;
   NEST_PORT: number;
   DB_HOST: string;
   DB_PORT: number;

@@ -18,6 +18,7 @@ export class ChaptersRepository extends Repository<Chapter> {
         manga: mangaId,
         number: chapterNo,
       },
+      relations: ['manga'],
     });
   }
 }

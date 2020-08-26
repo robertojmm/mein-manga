@@ -22,6 +22,7 @@ import {
 } from '../../../common/utils';
 import { PrepareChapterDto } from '../dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from '../dto/updateChapterProgress.dto';
+import { env } from 'src/env';
 
 @Injectable()
 export class ChaptersService {
@@ -48,7 +49,7 @@ export class ChaptersService {
     const filePath = `${folder}/${file.originalname}`;
     fs.renameSync(file.path, filePath);
 
-    const coverPath = this.extractChapterCover(
+    const { pages, path } = this.extractChapterCover(
       filePath,
       `${settings.get('COVERS_FOLDER')}/${manga.name}`,
     );
@@ -56,7 +57,8 @@ export class ChaptersService {
     return this.chaptersRepository.saveChapter(manga, {
       number: chapter.number,
       filePath,
-      coverPath,
+      coverPath: path,
+      pages,
     });
   }
 
@@ -72,14 +74,12 @@ export class ChaptersService {
     filePath: string;
     destination: string;
     onlyExtractCover?: boolean;
-  }): string {
+  }): { pages: number; path: string } {
     createFolderIfNotExists(options.destination);
 
-    const location = options.filePath.endsWith('cbz')
+    return options.filePath.endsWith('cbz')
       ? this.readZip(options)
       : this.readRar(options);
-
-    return location;
   }
 
   private readZip({
@@ -90,12 +90,14 @@ export class ChaptersService {
     filePath: string;
     destination: string;
     onlyExtractCover?: boolean;
-  }): string {
+  }): { pages: number; path: string } {
     const files = new AdmZip(filePath).getEntries();
+
+    const result = { pages: files.length, path: destination };
 
     if (onlyExtractCover) {
       const file = files[0];
-      return writeFileSyncWithSafeName(
+      result.path = writeFileSyncWithSafeName(
         destination,
         file.entryName,
         file.getData(),
@@ -105,7 +107,7 @@ export class ChaptersService {
     files.forEach(file =>
       writeFileSyncWithSafeName(destination, file.entryName, file.getData()),
     );
-    return destination;
+    return result;
   }
 
   private readRar({
@@ -116,22 +118,25 @@ export class ChaptersService {
     filePath: string;
     destination: string;
     onlyExtractCover?: boolean;
-  }): string {
+  }): { pages: number; path: string } {
     const files = UnrarJs.unrarSync(filePath);
+
+    const result = { pages: files.lenght, path: destination };
 
     if (onlyExtractCover) {
       const file = files[0];
-      return writeFileSyncWithSafeName(
+      result.path = writeFileSyncWithSafeName(
         destination,
         file.filename,
         file.fileData,
       );
+      return result;
     }
 
     files.forEach(file =>
       writeFileSyncWithSafeName(destination, file.filename, file.fileData),
     );
-    return destination;
+    return result;
   }
 
   public async prepareChapter(
@@ -148,16 +153,38 @@ export class ChaptersService {
       throw new ChapterNotFoundException();
     }
 
+    const destination = `${settings.get('TEMP_FOLDER')}/${chapter.manga.name}/${
+      chapter.number
+    }`;
+
+    fs.mkdirSync(destination, {
+      recursive: true,
+    });
+
     this.extractChapterFile({
       filePath: chapter.filePath,
-      destination: settings.get('TEMP_FOLDER'),
+      destination,
     });
 
     // Create URLS to each page
-    const pages = fs.readdirSync(settings.get('TEMP_FOLDER'));
-    return pages.map(page => `//localhost:3000/reading/${page}`);
+    const pages = fs.readdirSync(destination);
+    return pages.map(
+      page =>
+        `//${env.NEST_HOST}:${env.NEST_PORT}/reading/${chapter.manga.name}/${chapter.number}/${page}`,
+    );
 
     // Should store wich manga is actually reading??? (to avoid multiple extractions)
+  }
+
+  private isChapterPrepared() {
+    console.log('TODO');
+    /*
+    
+    just check if exists folder
+    Example: Mein-Manga/tempFolder/Berserk/3
+    
+
+    */
   }
 
   public updateChapterProgress(

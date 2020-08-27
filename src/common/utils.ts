@@ -19,3 +19,11 @@ export function createFolderIfNotExists(folderName: string): void {
     fs.mkdirSync(folderName);
   }
 }
+
+export function fileNameIsAPicture(fileName: string): boolean {
+  return (
+    fileName.endsWith('.jpg') ||
+    fileName.endsWith('.jpeg') ||
+    fileName.endsWith('.png')
+  );
+}

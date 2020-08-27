@@ -19,6 +19,7 @@ import settings from '../../../common/settings';
 import {
   writeFileSyncWithSafeName,
   createFolderIfNotExists,
+  fileNameIsAPicture,
 } from '../../../common/utils';
 import { PrepareChapterDto } from '../dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from '../dto/updateChapterProgress.dto';
@@ -96,17 +97,28 @@ export class ChaptersService {
     const result = { pages: files.length, path: destination };
 
     if (onlyExtractCover) {
-      const file = files[0];
+      let i = 0;
+      let file = files[i];
+
+      while (file.isDirectory || !fileNameIsAPicture(file.name)) {
+        i++;
+        file = files[i];
+      }
+
       result.path = writeFileSyncWithSafeName(
         destination,
         file.entryName,
         file.getData(),
       );
+      return result;
     }
 
-    files.forEach(file =>
-      writeFileSyncWithSafeName(destination, file.entryName, file.getData()),
-    );
+    files.forEach(file => {
+      if (!file.isDirectory && fileNameIsAPicture(file.name)) {
+        console.log(file.name);
+        writeFileSyncWithSafeName(destination, file.entryName, file.getData());
+      }
+    });
     return result;
   }
 
@@ -177,16 +189,7 @@ export class ChaptersService {
   }
 
   private isChapterPrepared(chapterTempPath: string) {
-    console.log('TODO');
-
     return fs.existsSync(chapterTempPath);
-    /*
-    
-    just check if exists folder
-    Example: Mein-Manga/tempFolder/Berserk/3
-    
-
-    */
   }
 
   public updateChapterProgress(

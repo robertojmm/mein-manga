@@ -209,6 +209,10 @@ export class ChaptersService {
     return fs.existsSync(chapterTempPath);
   }
 
+  private shouldPrepareNextChapter(totalPages: number, actualpage: number) {
+    return totalPages - actualpage <= 5;
+  }
+
   public async updateChapterProgress({
     userId,
     mangaId,
@@ -230,6 +234,14 @@ export class ChaptersService {
       mangaId,
       chapterNo,
     );
+
+    console.log(chapter.pages);
+    console.log(page);
+    console.log(chapter.pages - page <= 5);
+
+    if (this.shouldPrepareNextChapter(chapter.pages, page)) {
+      this.prepareChapter(mangaId, chapterNo + 1);
+    }
 
     //if (!progress) {
     const entity = new UserMangaChapter();

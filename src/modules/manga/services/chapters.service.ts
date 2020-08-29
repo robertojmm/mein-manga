@@ -12,6 +12,7 @@ import { Chapter } from '../entities/chapter.entity';
 import {
   MangaNotFoundException,
   ChapterNotFoundException,
+  ChapterNumberAlreadyExists,
 } from '../../../common/exceptions';
 
 import * as AdmZip from 'adm-zip';
@@ -48,6 +49,16 @@ export class ChaptersService {
     const manga = await this.mangaRepository.getMangaById(mangaId);
     if (!manga) {
       throw new MangaNotFoundException();
+    }
+
+    const chapterEntity = await this.chaptersRepository.findOne({
+      where: {
+        manga,
+        number: chapter.number,
+      },
+    });
+    if (chapterEntity) {
+      throw new ChapterNumberAlreadyExists(manga.name);
     }
 
     const folder = `${file.destination}/${manga.name}`;

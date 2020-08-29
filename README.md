@@ -35,8 +35,16 @@ $ npm install
 # Basic run
 $ npm start
 
+
 # Using screen
+# Create the screen
+$ screen -S mein-manga
+
+# Then execute the app
 $ npm start
+
+# To exit without stopping the app
+Control + A, then Control + D
 ```
 
 

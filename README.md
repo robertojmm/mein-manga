@@ -19,7 +19,13 @@ $ npm install
 ```
 :exclamation:
 :exclamation:
- Don't forget to edit src/env.ts with your credentials 
+ Don't forget to edit src/env.ts with your credentials
+:exclamation:
+:exclamation:
+
+:exclamation:
+:exclamation:
+ Don't forget to change folder paths in dist/settings.json once you executed the app
 :exclamation:
 :exclamation:
 
@@ -33,15 +39,6 @@ $ npm start
 $ npm start
 ```
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 

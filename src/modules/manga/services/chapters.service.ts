@@ -260,7 +260,7 @@ export class ChaptersService {
     userId,
     mangaId,
     chapterNo,
-  }: GetChapterProgressDto) {
+  }: GetChapterProgressDto): Promise<UserMangaChapter> {
     const chapter = await this.chaptersRepository.searchChapter(
       mangaId,
       chapterNo,

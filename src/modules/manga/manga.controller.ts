@@ -26,6 +26,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { GetChapterProgressDto } from './dto/getChapterProgress.dto';
+import { UserMangaChapter } from './entities/user-manga-chapter.entity';
 
 @Controller('manga')
 @UseGuards(RolesGuard)
@@ -130,7 +131,10 @@ export class MangaController {
   @Post('getChapterProgress')
   @Roles('user')
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  getChapterProgress(@Body() body: GetChapterProgressDto, @User() user) {
+  getChapterProgress(
+    @Body() body: GetChapterProgressDto,
+    @User() user,
+  ): Promise<UserMangaChapter> {
     const { userId } = user;
     return this.chaptersService.getChapterProgress({ userId, ...body });
   }

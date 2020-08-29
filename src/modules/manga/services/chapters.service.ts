@@ -28,6 +28,7 @@ import { UpdateChapterProgressDto } from '../dto/updateChapterProgress.dto';
 import { env } from 'src/env';
 import { Repository } from 'typeorm';
 import { UserMangaChapter } from '../entities/user-manga-chapter.entity';
+import { GetChapterProgressDto } from '../dto/getChapterProgress.dto';
 
 @Injectable()
 export class ChaptersService {
@@ -246,6 +247,25 @@ export class ChaptersService {
         .values(xd
         ); */
     //}
+  }
+
+  public async getChapterProgress({
+    userId,
+    mangaId,
+    chapterNo,
+  }: GetChapterProgressDto) {
+    const chapter = await this.chaptersRepository.searchChapter(
+      mangaId,
+      chapterNo,
+    );
+
+    return this.userProgressRepository.findOne({
+      where: {
+        user: userId,
+        manga: mangaId,
+        chapter,
+      },
+    });
   }
 
   public async deleteChapter({ mangaId, chapterNo }: PrepareChapterDto) {

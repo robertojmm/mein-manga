@@ -25,6 +25,7 @@ import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { User } from 'src/common/decorators/user.decorator';
+import { GetChapterProgressDto } from './dto/getChapterProgress.dto';
 
 @Controller('manga')
 @UseGuards(RolesGuard)
@@ -123,6 +124,15 @@ export class MangaController {
     console.log(body);
     this.chaptersService.updateChapterProgress({ userId, ...body });
     return Promise.resolve();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  @Post('getChapterProgress')
+  @Roles('user')
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  getChapterProgress(@Body() body: GetChapterProgressDto, @User() user) {
+    const { userId } = user;
+    return this.chaptersService.getChapterProgress({ userId, ...body });
   }
 
   @Delete('chapters')

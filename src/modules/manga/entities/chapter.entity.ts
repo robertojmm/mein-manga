@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 import { Manga } from './manga.entity';
+import { UserMangaChapter } from './user-manga-chapter.entity';
 
 @Entity({ name: 'CHAPTERS' })
 export class Chapter {
@@ -14,13 +16,6 @@ export class Chapter {
 
   @Column()
   number: number;
-
-  /*
-  @Column({
-    name: 'manga_id',
-  })
-  mangaId: number;
-  */
 
   @ManyToOne(
     type => Manga,
@@ -42,4 +37,10 @@ export class Chapter {
 
   @Column()
   pages: number;
+
+  @OneToMany(
+    type => UserMangaChapter,
+    userMangaChapter => userMangaChapter.chapter,
+  )
+  usersReading: UserMangaChapter[];
 }

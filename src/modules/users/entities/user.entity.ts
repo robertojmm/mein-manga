@@ -4,8 +4,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from 'typeorm';
 import { Role } from './role.entity';
+import { UserMangaChapter } from 'src/modules/manga/entities/user-manga-chapter.entity';
 
 @Entity('USERS')
 export class User {
@@ -27,4 +29,10 @@ export class User {
   )
   @JoinTable()
   roles: Role[];
+
+  @OneToMany(
+    type => UserMangaChapter,
+    userMangaChapter => userMangaChapter.user,
+  )
+  mangasReading: UserMangaChapter[];
 }

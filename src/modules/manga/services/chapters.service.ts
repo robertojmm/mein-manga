@@ -132,7 +132,6 @@ export class ChaptersService {
 
     files.forEach(file => {
       if (!file.isDirectory && fileNameIsAPicture(file.name)) {
-        console.log(file.name);
         writeFileSyncWithSafeName(destination, file.entryName, file.getData());
       }
     });
@@ -234,10 +233,6 @@ export class ChaptersService {
       mangaId,
       chapterNo,
     );
-
-    console.log(chapter.pages);
-    console.log(page);
-    console.log(chapter.pages - page <= 5);
 
     if (this.shouldPrepareNextChapter(chapter.pages, page)) {
       this.prepareChapter(mangaId, chapterNo + 1);

@@ -3,6 +3,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import {
   CHAPTER_REPOSITORY_TOKEN,
   MANGA_REPOSITORY_TOKEN,
+  USER_MANGA_CHAPTER_REPOSITORY_TOKEN,
 } from '../../../common/config/databaseTokens.constants';
 import { ChaptersRepository } from '../chapters.repository';
 import { MangaRepository } from '../manga.repository';
@@ -24,6 +25,8 @@ import {
 import { PrepareChapterDto } from '../dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from '../dto/updateChapterProgress.dto';
 import { env } from 'src/env';
+import { Repository } from 'typeorm';
+import { UserMangaChapter } from '../entities/user-manga-chapter.entity';
 
 @Injectable()
 export class ChaptersService {
@@ -32,6 +35,8 @@ export class ChaptersService {
     private readonly chaptersRepository: ChaptersRepository,
     @Inject(MANGA_REPOSITORY_TOKEN)
     private readonly mangaRepository: MangaRepository,
+    @Inject(USER_MANGA_CHAPTER_REPOSITORY_TOKEN)
+    private readonly userProgressRepository: Repository<UserMangaChapter>,
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
@@ -192,11 +197,44 @@ export class ChaptersService {
     return fs.existsSync(chapterTempPath);
   }
 
-  public updateChapterProgress(
-    updateChapterProgressDto: UpdateChapterProgressDto,
-  ) {
-    console.log(updateChapterProgressDto);
-    //Need to create auth and users to continue.
+  public async updateChapterProgress({
+    userId,
+    mangaId,
+    chapterNo,
+    page,
+  }: UpdateChapterProgressDto) {
+    /* const progress = await this.userProgressRepository.findOne({
+      where: { user: userId, manga: mangaId },
+    });
+
+    /* 
+    
+    TODO
+    CREATES A SECOND TABLE DUE TO UNKNOWN REASON. CHECK IT
+
+    */
+
+    const chapter = await this.chaptersRepository.searchChapter(
+      mangaId,
+      chapterNo,
+    );
+
+    //if (!progress) {
+    const entity = new UserMangaChapter();
+    entity.user = <any>{ uid: userId };
+    entity.manga = <any>{ id: mangaId };
+    entity.chapter = chapter;
+    entity.page = page;
+
+    return this.userProgressRepository.save(entity);
+
+    /* this.userProgressRepository
+        .createQueryBuilder()
+        .insert()
+        .into(UserMangaChapter)
+        .values(xd
+        ); */
+    //}
   }
 
   public async deleteChapter({ mangaId, chapterNo }: PrepareChapterDto) {

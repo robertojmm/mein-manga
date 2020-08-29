@@ -13,5 +13,7 @@ export class UpdateChapterProgressDto {
 
   @IsNotEmpty()
   @IsNumber()
-  pageProgress: number;
+  page: number;
+
+  userId: number;
 }

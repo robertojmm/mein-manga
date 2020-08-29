@@ -8,6 +8,7 @@ import {
   UploadedFile,
   UseGuards,
   Delete,
+  Req,
 } from '@nestjs/common';
 import { MangaService } from './services/manga.service';
 import { Manga } from './entities/manga.entity';
@@ -23,6 +24,7 @@ import { UpdateChapterProgressDto } from './dto/updateChapterProgress.dto';
 import { JwtAuthGuard } from '../auth/guards/jwtAuth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
+import { User } from 'src/common/decorators/user.decorator';
 
 @Controller('manga')
 @UseGuards(RolesGuard)
@@ -111,8 +113,15 @@ export class MangaController {
 
   @Post('updateChapterProgress')
   @Roles('user')
-  updateChapterProgress(@Body() body: UpdateChapterProgressDto): Promise<void> {
-    this.chaptersService.updateChapterProgress(body);
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  updateChapterProgress(
+    @Body() body: UpdateChapterProgressDto,
+    @User() user,
+  ): Promise<void> {
+    const { userId } = user;
+    console.log(userId);
+    console.log(body);
+    this.chaptersService.updateChapterProgress({ userId, ...body });
     return Promise.resolve();
   }
 

@@ -27,6 +27,7 @@ import { Roles } from '../../common/decorators/roles.decorator';
 import { User } from 'src/common/decorators/user.decorator';
 import { GetChapterProgressDto } from './dto/getChapterProgress.dto';
 import { UserMangaChapter } from './entities/user-manga-chapter.entity';
+import { FileNotFoundOnRequestException } from 'src/common/exceptions';
 
 @Controller('manga')
 @UseGuards(RolesGuard)
@@ -66,6 +67,9 @@ export class MangaController {
     @Body() createMangaDto: CreateMangaDto,
     @UploadedFile() file: any,
   ): Promise<Manga> {
+    if (!file) {
+      throw new FileNotFoundOnRequestException();
+    }
     return this.mangaService.createManga(createMangaDto, file);
   }
 
@@ -112,7 +116,9 @@ export class MangaController {
     @Body() newChapterDto: NewChapterDto,
     @UploadedFile() file: any,
   ): Promise<Chapter> {
-    console.log(file);
+    if (!file) {
+      throw new FileNotFoundOnRequestException();
+    }
     return this.chaptersService.saveChapter(id, newChapterDto, file);
   }
 

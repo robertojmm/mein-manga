@@ -62,6 +62,9 @@ export class ChaptersService {
       throw new ChapterNumberAlreadyExists(manga.name);
     }
 
+    manga.chapterAmount++;
+    this.mangaRepository.save(manga);
+
     const folder = `${file.destination}/${manga.name}`;
     createFolderIfNotExists(folder);
     const filePath = `${folder}/${file.originalname}`;
@@ -289,6 +292,10 @@ export class ChaptersService {
     if (!chapter) {
       throw new ChapterNotFoundException();
     }
+
+    const manga = chapter.manga;
+    manga.chapterAmount--;
+    this.mangaRepository.save(manga);
 
     this.deleteChapterFiles(chapter);
 

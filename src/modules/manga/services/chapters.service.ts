@@ -13,7 +13,6 @@ import {
   MangaNotFoundException,
   ChapterNotFoundException,
   ChapterNumberAlreadyExists,
-  FileNotFoundException,
 } from '../../../common/exceptions';
 
 import * as AdmZip from 'adm-zip';
@@ -48,10 +47,6 @@ export class ChaptersService {
     chapter: NewChapterDto,
     file: any,
   ): Promise<Chapter> {
-    if (!file) {
-      throw new FileNotFoundException();
-    }
-
     const manga = await this.mangaRepository.getMangaById(mangaId);
     if (!manga) {
       throw new MangaNotFoundException();

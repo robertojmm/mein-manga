@@ -4,8 +4,12 @@ const settings = new Configstore(
   'mein-manga',
   {
     MANGA_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/mangas',
-    COVERS_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/covers',
-    TEMP_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/temp',
+    STATIC_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/static',
+    READING_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/static/reading',
+    MANGA_COVERS_FOLDER:
+      'C:\\Users\\Roberto\\Desktop\\mein-manga/static/manga_covers',
+    CHAPTER_COVERS_FOLDER:
+      'C:\\Users\\Roberto\\Desktop\\mein-manga/static/chapter_covers',
   },
   { configPath: `${__dirname}/../settings.json` },
 );

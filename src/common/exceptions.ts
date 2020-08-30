@@ -60,3 +60,10 @@ export class UserAlreadyExistsException extends HttpException {
     );
   }
 }
+
+export class FileNotFoundException extends NotFoundException {
+  constructor() {
+    const msg = `File not found`;
+    super(msg);
+  }
+}

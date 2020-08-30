@@ -13,6 +13,7 @@ import {
   MangaNotFoundException,
   ChapterNotFoundException,
   ChapterNumberAlreadyExists,
+  FileNotFoundException,
 } from '../../../common/exceptions';
 
 import * as AdmZip from 'adm-zip';
@@ -47,6 +48,10 @@ export class ChaptersService {
     chapter: NewChapterDto,
     file: any,
   ): Promise<Chapter> {
+    if (!file) {
+      throw new FileNotFoundException();
+    }
+
     const manga = await this.mangaRepository.getMangaById(mangaId);
     if (!manga) {
       throw new MangaNotFoundException();
@@ -67,15 +72,18 @@ export class ChaptersService {
     const filePath = `${folder}/${file.originalname}`;
     fs.renameSync(file.path, filePath);
 
-    const { pages, path } = this.extractChapterCover(
+    const { pages, path, posterName } = this.extractChapterCover(
       filePath,
-      `${settings.get('COVERS_FOLDER')}/${manga.name}`,
+      `${settings.get('CHAPTER_COVERS_FOLDER')}/${manga.name}`,
     );
+
+    const coverWebPath = `//${env.NEST_HOST}:${env.NEST_PORT}/chapter_covers/${manga.name}/${posterName}`;
 
     return this.chaptersRepository.saveChapter(manga, {
       number: chapter.number,
       filePath,
       coverPath: path,
+      coverWebPath,
       pages,
     });
   }
@@ -92,7 +100,7 @@ export class ChaptersService {
     filePath: string;
     destination: string;
     onlyExtractCover?: boolean;
-  }): { pages: number; path: string } {
+  }): { pages: number; path: string; posterName: string } {
     createFolderIfNotExists(options.destination);
 
     return options.filePath.endsWith('cbz')
@@ -108,10 +116,10 @@ export class ChaptersService {
     filePath: string;
     destination: string;
     onlyExtractCover?: boolean;
-  }): { pages: number; path: string } {
+  }): { pages: number; path: string; posterName: string } {
     const files = new AdmZip(filePath).getEntries();
 
-    const result = { pages: files.length, path: destination };
+    const result = { pages: files.length, path: destination, posterName: '' };
 
     if (onlyExtractCover) {
       let i = 0;
@@ -122,9 +130,10 @@ export class ChaptersService {
         file = files[i];
       }
 
+      result.posterName = file.name;
       result.path = writeFileSyncWithSafeName(
         destination,
-        file.entryName,
+        file.name,
         file.getData(),
       );
       return result;
@@ -146,13 +155,14 @@ export class ChaptersService {
     filePath: string;
     destination: string;
     onlyExtractCover?: boolean;
-  }): { pages: number; path: string } {
+  }): { pages: number; path: string; posterName: string } {
     const files = UnrarJs.unrarSync(filePath);
 
-    const result = { pages: files.lenght, path: destination };
+    const result = { pages: files.lenght, path: destination, posterName: '' };
 
     if (onlyExtractCover) {
       const file = files[0];
+      result.posterName = file.filename;
       result.path = writeFileSyncWithSafeName(
         destination,
         file.filename,
@@ -181,9 +191,9 @@ export class ChaptersService {
       throw new ChapterNotFoundException();
     }
 
-    const destination = `${settings.get('TEMP_FOLDER')}/${chapter.manga.name}/${
-      chapter.number
-    }`;
+    const destination = `${settings.get('READING_FOLDER')}/${
+      chapter.manga.name
+    }/${chapter.number}`;
 
     if (!this.isChapterPrepared(destination)) {
       fs.mkdirSync(destination, {

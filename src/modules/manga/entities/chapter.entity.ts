@@ -35,6 +35,11 @@ export class Chapter {
   })
   coverPath: string;
 
+  @Column({
+    name: 'cover_web_path',
+  })
+  coverWebPath: string;
+
   @Column()
   pages: number;
 

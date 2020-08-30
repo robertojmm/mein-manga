@@ -17,8 +17,8 @@ import settings from './common/settings';
       dest: settings.get('MANGA_FOLDER'), //'./files',
     }),
     ServeStaticModule.forRoot({
-      rootPath: settings.get('TEMP_FOLDER'),
-      serveRoot: '/reading',
+      rootPath: settings.get('STATIC_FOLDER'),
+      //serveRoot: '/reading',
     }),
   ],
   controllers: [],

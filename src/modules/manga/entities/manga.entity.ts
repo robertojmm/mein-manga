@@ -16,6 +16,16 @@ export class Manga {
   })
   chapterAmount: number;
 
+  @Column({
+    name: 'cover_path',
+  })
+  coverPath: string;
+
+  @Column({
+    name: 'cover_web_path',
+  })
+  coverWebPath: string;
+
   @OneToMany(
     type => Chapter,
     chapter => chapter.manga,

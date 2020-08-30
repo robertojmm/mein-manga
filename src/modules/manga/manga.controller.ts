@@ -49,6 +49,26 @@ export class MangaController {
     return await this.mangaService.getManga(id);
   }
 
+  @Post()
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: settings.get('MANGA_COVERS_FOLDER'),
+        filename: (req, file, callback) => {
+          callback(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  @Roles('admin')
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  createManga(
+    @Body() createMangaDto: CreateMangaDto,
+    @UploadedFile() file: any,
+  ): Promise<Manga> {
+    return this.mangaService.createManga(createMangaDto, file);
+  }
+
   @Delete('deleteManga/:id')
   @Roles('admin')
   deleteManga(@Param('id') id: number) {
@@ -72,12 +92,6 @@ export class MangaController {
   ): Promise<Chapter> {
     //return specific chapter of a manga
     return await this.mangaService.getChapter(id, chapterNo);
-  }
-
-  @Post()
-  @Roles('admin')
-  createManga(@Body() createMangaDto: CreateMangaDto): Promise<Manga> {
-    return this.mangaService.createManga(createMangaDto);
   }
 
   @Post(':id/chapters') //TODO test roles here

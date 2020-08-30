@@ -12,6 +12,7 @@ import {
   MangaAlreadyExistsException,
   ChapterNotFoundException,
 } from '../../../common/exceptions';
+import { env } from 'src/env';
 
 @Injectable()
 export class MangaService {
@@ -56,7 +57,11 @@ export class MangaService {
     return chapter;
   }
 
-  public async createManga(createMangaDto: CreateMangaDto): Promise<Manga> {
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  public async createManga(
+    createMangaDto: CreateMangaDto,
+    file: any,
+  ): Promise<Manga> {
     const manga = await this.mangaRepository.getMangaByName(
       createMangaDto.name,
     );
@@ -65,7 +70,13 @@ export class MangaService {
       throw new MangaAlreadyExistsException();
     }
 
-    return this.mangaRepository.saveManga(createMangaDto);
+    const coverWebPath = `//${env.NEST_HOST}:${env.NEST_PORT}/manga_covers/${file.filename}`;
+
+    return this.mangaRepository.saveManga({
+      ...createMangaDto,
+      coverPath: file.path,
+      coverWebPath,
+    });
   }
 
   async deleteManga(id: number) {

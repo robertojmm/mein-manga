@@ -13,6 +13,7 @@ import {
   ChapterNotFoundException,
 } from '../../../common/exceptions';
 import { env } from 'src/env';
+import * as fs from 'fs';
 
 @Injectable()
 export class MangaService {
@@ -94,6 +95,8 @@ export class MangaService {
         this.chaptersService.deleteChapterFiles(chapter),
       );
     }
+
+    fs.unlinkSync(manga.coverPath);
 
     return this.mangaRepository.delete(manga);
   }

@@ -71,7 +71,7 @@ export class MangaService {
       throw new MangaAlreadyExistsException();
     }
 
-    const coverWebPath = `//${env.NEST_HOST}:${env.NEST_PORT}/manga_covers/${file.filename}`;
+    const coverWebPath = `/manga_covers/${file.filename}`;
 
     return this.mangaRepository.saveManga({
       ...createMangaDto,

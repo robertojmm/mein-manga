@@ -75,7 +75,7 @@ export class ChaptersService {
       `${settings.get('CHAPTER_COVERS_FOLDER')}/${manga.name}`,
     );
 
-    const coverWebPath = `//${env.NEST_HOST}:${env.NEST_PORT}/chapter_covers/${manga.name}/${posterName}`;
+    const coverWebPath = `/chapter_covers/${manga.name}/${posterName}`;
 
     return this.chaptersRepository.saveChapter(manga, {
       number: chapter.number,
@@ -207,8 +207,7 @@ export class ChaptersService {
     // Create URLS to each page
     const pages = fs.readdirSync(destination);
     return pages.map(
-      page =>
-        `//${env.NEST_HOST}:${env.NEST_PORT}/reading/${chapter.manga.name}/${chapter.number}/${page}`,
+      page => `/reading/${chapter.manga.name}/${chapter.number}/${page}`,
     );
   }
 

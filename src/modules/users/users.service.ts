@@ -84,7 +84,9 @@ export class UsersService {
   }
 
   public async getAllUsers(): Promise<UserCompleteDto[]> {
-    const usersEntities = await this.usersRepository.find();
+    const usersEntities = await this.usersRepository.find({
+      relations: ['roles'],
+    });
 
     return usersEntities.map(user => new UserCompleteDto(user));
   }

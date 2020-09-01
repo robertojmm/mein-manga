@@ -21,8 +21,6 @@ export class UserCompleteDto {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(user: any) {
-    console.log('xd');
-    console.log(user);
     const { uid, username, email, roles } = user;
     //super(userDto);
     this.uid = uid;

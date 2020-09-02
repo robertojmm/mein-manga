@@ -8,6 +8,7 @@ const settings = new Configstore(
   {
     APPFOLDER,
     MANGA_FOLDER: `${APPFOLDER}/mangas`,
+    WEB_APP_FOLDER: `${APPFOLDER}/webApp`,
     STATIC_FOLDER,
     READING_FOLDER: `${STATIC_FOLDER}/reading`,
     MANGA_COVERS_FOLDER: `${STATIC_FOLDER}/manga_covers`,

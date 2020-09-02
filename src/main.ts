@@ -4,6 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { env } from './env';
 import settings from './common/settings';
 import { createFolderIfNotExists } from './common/utils';
+import express from 'express';
+import WebServer from './webServer';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -16,5 +18,6 @@ function createAppFolders() {
   Object.values(settings.all).forEach(createFolderIfNotExists);
 }
 
+new WebServer().listen();
 createAppFolders();
 bootstrap();

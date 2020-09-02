@@ -1,4 +1,4 @@
-import express from 'express';
+import * as express from 'express';
 import { Application } from 'express';
 import settings from './common/settings';
 import { env } from './env';

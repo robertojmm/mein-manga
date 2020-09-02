@@ -1,15 +1,17 @@
 import * as Configstore from 'configstore';
 
+const APPFOLDER = `${__dirname}/../../../mein-manga_data`;
+const STATIC_FOLDER = `${APPFOLDER}/static`;
+
 const settings = new Configstore(
   'mein-manga',
   {
-    MANGA_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/mangas',
-    STATIC_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/static',
-    READING_FOLDER: 'C:\\Users\\Roberto\\Desktop\\mein-manga/static/reading',
-    MANGA_COVERS_FOLDER:
-      'C:\\Users\\Roberto\\Desktop\\mein-manga/static/manga_covers',
-    CHAPTER_COVERS_FOLDER:
-      'C:\\Users\\Roberto\\Desktop\\mein-manga/static/chapter_covers',
+    APPFOLDER,
+    MANGA_FOLDER: `${APPFOLDER}/mangas`,
+    STATIC_FOLDER,
+    READING_FOLDER: `${STATIC_FOLDER}/reading`,
+    MANGA_COVERS_FOLDER: `${STATIC_FOLDER}/manga_covers`,
+    CHAPTER_COVERS_FOLDER: `${STATIC_FOLDER}/chapter_covers`,
   },
   { configPath: `${__dirname}/../settings.json` },
 );

@@ -6,7 +6,11 @@ import { CreateMangaDto } from './dto/createManga.dto';
 @EntityRepository(Manga)
 export class MangaRepository extends Repository<Manga> {
   public getMangas(): Promise<Manga[]> {
-    return this.find();
+    return this.find({
+      order: {
+        name: 'ASC',
+      },
+    });
   }
 
   public getMangaById(id: number): Promise<Manga> {

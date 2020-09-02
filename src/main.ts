@@ -4,7 +4,6 @@ import { ValidationPipe } from '@nestjs/common';
 import { env } from './env';
 import settings from './common/settings';
 import { createFolderIfNotExists } from './common/utils';
-import express from 'express';
 import WebServer from './webServer';
 
 async function bootstrap() {

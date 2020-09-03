@@ -159,9 +159,11 @@ export class MangaController {
     return this.chaptersService.getChapterProgress({ userId, ...body });
   }
 
-  @Delete('chapters')
+  @Delete(':mangaId/chapters/:chapterNo')
   @Roles('admin')
-  deleteChapter(@Body() chapterDto: PrepareChapterDto) {
-    return this.chaptersService.deleteChapter(chapterDto);
+  deleteChapter(/* @Body() chapterDto: PrepareChapterDto */
+  @Param('mangaId') mangaId: number,
+  @Param('chapterNo') chapterNo: number) {
+    return this.chaptersService.deleteChapter({mangaId, chapterNo});
   }
 }

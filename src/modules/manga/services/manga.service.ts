@@ -71,6 +71,7 @@ export class MangaService {
     );
 
     if (manga) {
+      fs.unlinkSync(file.path);
       throw new MangaAlreadyExistsException();
     }
 

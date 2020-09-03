@@ -62,6 +62,7 @@ export class ChaptersService {
       },
     });
     if (chapterEntity) {
+      fs.unlinkSync(file.path);
       throw new ChapterNumberAlreadyExists(manga.name);
     }
 

@@ -3,6 +3,8 @@ import { Manga } from '../entities/manga.entity';
 
 import { MangaRepository } from '../manga.repository';
 
+import { Base64 } from 'js-base64';
+
 import { MANGA_REPOSITORY_TOKEN } from '../../../common/config/databaseTokens.constants';
 import { Chapter } from '../entities/chapter.entity';
 import { CreateMangaDto } from '../dto/createManga.dto';
@@ -14,6 +16,7 @@ import {
 } from '../../../common/exceptions';
 import { env } from 'src/env';
 import * as fs from 'fs';
+import { getFileExtension } from 'src/common/utils';
 
 @Injectable()
 export class MangaService {
@@ -71,11 +74,20 @@ export class MangaService {
       throw new MangaAlreadyExistsException();
     }
 
-    const coverWebPath = `/manga_covers/${file.filename}`;
+    const extension = getFileExtension(file.filename);
+
+    const encodedFileName = `${Base64.encode(
+      file.filename + new Date().getTime(),
+    )}.${extension}`;
+
+    const coverPath = file.path.replace(file.filename, encodedFileName);
+    fs.renameSync(file.path, coverPath);
+
+    const coverWebPath = `/manga_covers/${encodedFileName}`;
 
     return this.mangaRepository.saveManga({
       ...createMangaDto,
-      coverPath: file.path,
+      coverPath,
       coverWebPath,
     });
   }

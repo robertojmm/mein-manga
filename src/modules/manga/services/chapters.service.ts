@@ -17,11 +17,14 @@ import {
 
 import * as AdmZip from 'adm-zip';
 import * as UnrarJs from 'unrar-js';
+import { Base64 } from 'js-base64';
+
 import settings from '../../../common/settings';
 import {
   writeFileSyncWithSafeName,
   createFolderIfNotExists,
   fileNameIsAPicture,
+  getFileExtension,
 } from '../../../common/utils';
 import { PrepareChapterDto } from '../dto/prepareChapter.dto';
 import { UpdateChapterProgressDto } from '../dto/updateChapterProgress.dto';
@@ -128,10 +131,15 @@ export class ChaptersService {
         file = files[i];
       }
 
-      result.posterName = file.name;
+      const extension = getFileExtension(file.name);
+      const encodedFileName = `${Base64.encode(
+        file.name + new Date().getTime(),
+      )}.${extension}`;
+
+      result.posterName = encodedFileName;
       result.path = writeFileSyncWithSafeName(
         destination,
-        file.name,
+        encodedFileName,
         file.getData(),
       );
       return result;

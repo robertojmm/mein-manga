@@ -27,3 +27,8 @@ export function fileNameIsAPicture(fileName: string): boolean {
     fileName.endsWith('.png')
   );
 }
+
+export function getFileExtension(fileName: string): string {
+  const nameSplited = fileName.split('.');
+  return nameSplited[nameSplited.length - 1];
+}

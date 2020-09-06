@@ -2,6 +2,7 @@ import * as express from 'express';
 import { Application } from 'express';
 import settings from './common/settings';
 import { env } from './env';
+import * as path from 'path';
 
 class WebServer {
   private app: Application;
@@ -15,6 +16,14 @@ class WebServer {
     this.clientFolder = settings.get('WEB_APP_FOLDER');
 
     this.app.use(express.static(this.clientFolder));
+
+    this.app.get('/*', (req, res) => {
+      res.sendFile(path.join(this.clientFolder, 'index.html'), function(err) {
+        if (err) {
+          res.status(500).send(err);
+        }
+      });
+    });
   }
 
   listen(): void {

@@ -17,6 +17,7 @@ import {
 import { env } from 'src/env';
 import * as fs from 'fs';
 import { getFileExtension } from 'src/common/utils';
+import settings from 'src/common/settings';
 
 @Injectable()
 export class MangaService {
@@ -110,6 +111,9 @@ export class MangaService {
     }
 
     fs.unlinkSync(manga.coverPath);
+
+    const readingPath = `${settings.get('READING_FOLDER')}/${manga.name}`;
+    fs.unlinkSync(readingPath);
 
     return this.mangaRepository.delete(manga);
   }

@@ -307,6 +307,14 @@ export class ChaptersService {
 
     this.deleteChapterFiles(chapter);
 
+    const readingPath = `${settings.get('READING_FOLDER')}/${
+      chapter.manga.name
+    }/${chapter.number}`;
+
+    if (this.isChapterPrepared(readingPath)) {
+      fs.unlinkSync(readingPath);
+    }
+
     return this.chaptersRepository.delete(chapter);
   }
 

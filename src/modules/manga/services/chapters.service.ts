@@ -312,7 +312,7 @@ export class ChaptersService {
     }/${chapter.number}`;
 
     if (this.isChapterPrepared(readingPath)) {
-      fs.unlinkSync(readingPath);
+      fs.rmdirSync(readingPath, { recursive: true });
     }
 
     return this.chaptersRepository.delete(chapter);

@@ -113,7 +113,7 @@ export class MangaService {
     fs.unlinkSync(manga.coverPath);
 
     const readingPath = `${settings.get('READING_FOLDER')}/${manga.name}`;
-    fs.unlinkSync(readingPath);
+    fs.rmdirSync(readingPath, { recursive: true });
 
     return this.mangaRepository.delete(manga);
   }

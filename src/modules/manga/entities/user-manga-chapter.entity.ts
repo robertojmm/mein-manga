@@ -8,21 +8,21 @@ export class UserMangaChapter {
   @ManyToOne(
     type => User,
     user => user.mangasReading,
-    { primary: true },
+    { primary: true, onDelete: 'CASCADE' },
   )
   user: User;
 
   @ManyToOne(
     type => Manga,
     manga => manga.usersReading,
-    { primary: true },
+    { primary: true, onDelete: 'CASCADE' },
   )
   manga: Manga;
 
   @ManyToOne(
     type => Chapter,
     chapter => chapter.usersReading,
-    { primary: true },
+    { primary: true, onDelete: 'CASCADE' },
   )
   chapter: Chapter;
 

@@ -23,11 +23,17 @@ export class MangaRepository extends Repository<Manga> {
     });
   }
 
-  public getMangaWithChapters(id: number): Promise<Manga> {
+  public getMangaWithChapters(id: number): any {
     //Finish this
-    return this.findOne(id, {
+    /* return this.findOne(id, {
       relations: ['chapters'],
-    });
+    }); */
+
+    return this.createQueryBuilder('manga')
+      .innerJoinAndSelect('manga.chapters', 'chapters')
+      .orderBy('chapters.number', 'ASC')
+      .where('manga.id = :id', { id })
+      .getOne();
   }
 
   getChapter(id: number, chapterNo: number): Promise<Chapter> {

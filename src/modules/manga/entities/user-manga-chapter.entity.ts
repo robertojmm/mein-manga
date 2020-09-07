@@ -28,4 +28,11 @@ export class UserMangaChapter {
 
   @Column({ nullable: false })
   page: number;
+
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+    onUpdate: 'CURRENT_TIMESTAMP',
+  })
+  time: string;
 }

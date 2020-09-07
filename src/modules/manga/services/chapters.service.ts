@@ -350,6 +350,18 @@ export class ChaptersService {
     });
   }
 
+  public getContinueReading(userId: number): Promise<UserMangaChapter> {
+    return this.userProgressRepository.findOne({
+      where: {
+        user: userId,
+      },
+      order: {
+        time: 'DESC',
+      },
+      relations: ['chapter', 'manga'],
+    });
+  }
+
   public async deleteChapter({ mangaId, chapterNo }: PrepareChapterDto) {
     const chapter = await this.chaptersRepository.searchChapter(
       mangaId,

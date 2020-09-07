@@ -153,6 +153,14 @@ export class MangaController {
     return Promise.resolve();
   }
 
+  @Post('continueReading')
+  @Roles('user')
+  getContinueReading(
+    @Body() body: { userId: number },
+  ): Promise<UserMangaChapter> {
+    return this.chaptersService.getContinueReading(body.userId);
+  }
+
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Post('getChapterProgress')
   @Roles('user')

@@ -157,7 +157,7 @@ export class MangaController {
   @Roles('user')
   getContinueReading(
     @Body() body: { userId: number },
-  ): Promise<UserMangaChapter> {
+  ): Promise<UserMangaChapter[]> {
     return this.chaptersService.getContinueReading(body.userId);
   }
 

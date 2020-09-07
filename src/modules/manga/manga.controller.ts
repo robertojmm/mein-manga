@@ -9,6 +9,8 @@ import {
   UseGuards,
   Delete,
   Req,
+  Put,
+  UploadedFiles,
 } from '@nestjs/common';
 import { MangaService } from './services/manga.service';
 import { Manga } from './entities/manga.entity';
@@ -16,7 +18,11 @@ import { Chapter } from './entities/chapter.entity';
 import { CreateMangaDto } from './dto/createManga.dto';
 import { NewChapterDto } from './dto/newChapter.dto';
 import { ChaptersService } from './services/chapters.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  FileInterceptor,
+  FilesInterceptor,
+  FileFieldsInterceptor,
+} from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import settings from '../../common/settings';
 import { PrepareChapterDto } from './dto/prepareChapter.dto';
@@ -161,9 +167,34 @@ export class MangaController {
 
   @Delete(':mangaId/chapters/:chapterNo')
   @Roles('admin')
-  deleteChapter(/* @Body() chapterDto: PrepareChapterDto */
-  @Param('mangaId') mangaId: number,
-  @Param('chapterNo') chapterNo: number) {
-    return this.chaptersService.deleteChapter({mangaId, chapterNo});
+  deleteChapter(
+    /* @Body() chapterDto: PrepareChapterDto */
+    @Param('mangaId') mangaId: number,
+    @Param('chapterNo') chapterNo: number,
+  ) {
+    return this.chaptersService.deleteChapter({ mangaId, chapterNo });
+  }
+  //"/manga/:id/chapters/:chapterNo"
+  @Put(':mangaId/chapters/:chapterNo')
+  @UseInterceptors(
+    FileFieldsInterceptor([
+      { name: 'newFile', maxCount: 1 },
+      { name: 'newChapterPoster', maxCount: 1 },
+    ]),
+  )
+  @Roles('admin')
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  updateChapter(
+    @Param('mangaId') mangaId: number,
+    @Param('chapterNo') chapterNo: number,
+    @Body() body: { newChapterNo: number },
+    @UploadedFiles() files: any,
+  ): Promise<Chapter> {
+    return this.chaptersService.updateChapter(
+      mangaId,
+      chapterNo,
+      body.newChapterNo,
+      files,
+    );
   }
 }

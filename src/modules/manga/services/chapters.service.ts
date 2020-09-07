@@ -90,6 +90,65 @@ export class ChaptersService {
     });
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+  async updateChapter(
+    mangaId: number,
+    chapterNo: number,
+    newChapterNo?: number,
+    files?: {
+      newFile?: any;
+      newChapterPoster?: any;
+    },
+  ) {
+    const chapter = await this.chaptersRepository.searchChapter(
+      mangaId,
+      chapterNo,
+    );
+
+    if (newChapterNo) {
+      console.log(chapter);
+      this.deleteFilesIfChapterIsPrepared(chapter);
+      chapter.number = newChapterNo;
+    }
+
+    if (files.newFile) {
+      fs.unlinkSync(chapter.filePath);
+
+      console.log(files.newFile);
+      const newFile = files.newFile[0];
+
+      const destination = `${settings.get('MANGA_FOLDER')}/${
+        chapter.manga.name
+      }/${newFile.originalname}`;
+      fs.writeFileSync(destination, newFile.buffer, 'binary');
+
+      chapter.filePath = destination;
+      this.deleteFilesIfChapterIsPrepared(chapter);
+    }
+
+    if (files.newChapterPoster) {
+      fs.unlinkSync(chapter.coverPath);
+
+      const newChapterPoster = files.newChapterPoster[0];
+
+      const extension = getFileExtension(newChapterPoster.originalname);
+      const encodedFileName = `${Base64.encode(
+        newChapterPoster.originalname + new Date().getTime(),
+      )}.${extension}`;
+
+      const destination = `${settings.get('CHAPTER_COVERS_FOLDER')}/${
+        chapter.manga.name
+      }/${encodedFileName}`;
+
+      fs.writeFileSync(destination, newChapterPoster.buffer, 'binary');
+
+      chapter.coverPath = destination;
+      chapter.coverWebPath = `/chapter_covers/${chapter.manga.name}/${encodedFileName}`;
+    }
+
+    return this.chaptersRepository.save(chapter);
+  }
+
   private extractChapterCover(filePath: string, destination: string) {
     return this.extractChapterFile({
       filePath,
@@ -307,13 +366,7 @@ export class ChaptersService {
 
     this.deleteChapterFiles(chapter);
 
-    const readingPath = `${settings.get('READING_FOLDER')}/${
-      chapter.manga.name
-    }/${chapter.number}`;
-
-    if (this.isChapterPrepared(readingPath)) {
-      fs.rmdirSync(readingPath, { recursive: true });
-    }
+    this.deleteFilesIfChapterIsPrepared(chapter);
 
     return this.chaptersRepository.delete(chapter);
   }
@@ -321,5 +374,16 @@ export class ChaptersService {
   public deleteChapterFiles(chapter: Chapter): void {
     fs.unlinkSync(chapter.coverPath);
     fs.unlinkSync(chapter.filePath);
+  }
+
+  public deleteFilesIfChapterIsPrepared(chapter: Chapter): void {
+    console.log(chapter);
+    const readingPath = `${settings.get('READING_FOLDER')}/${
+      chapter.manga.name
+    }/${chapter.number}`;
+
+    if (this.isChapterPrepared(readingPath)) {
+      fs.rmdirSync(readingPath, { recursive: true });
+    }
   }
 }

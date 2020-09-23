@@ -161,6 +161,12 @@ export class MangaController {
     return this.chaptersService.getContinueReading(body.userId);
   }
 
+  @Post('latestUploads')
+  @Roles('user')
+  getLatestUploads(): Promise<Chapter[]> {
+    return this.chaptersService.getLatestUploads();
+  }
+
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   @Post('getChapterProgress')
   @Roles('user')

@@ -367,6 +367,19 @@ export class ChaptersService {
     return x;
   }
 
+  public async getLatestUploads(): Promise<Chapter[]> {
+    const x = await this.chaptersRepository.find({
+      order: {
+        id: 'DESC',
+      },
+      relations: ['manga'],
+      take: 3,
+    });
+
+    console.log(x);
+    return x;
+  }
+
   public async deleteChapter({ mangaId, chapterNo }: PrepareChapterDto) {
     const chapter = await this.chaptersRepository.searchChapter(
       mangaId,

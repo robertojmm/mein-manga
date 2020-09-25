@@ -8,6 +8,7 @@
   "scripts": {
     "install:all": "npm i && cd web && npm i",
     "prebuild": "rimraf dist",
+    "build:linux": "npm run prebuild && nest build && mkdir ./dist/web && npm run copyDistToWebFolder:linux",
     "build:windows": "npm run prebuild && nest build && mkdir .\\dist\\web && npm run copyDistToWebFolder:windows",
     "build:complete": "cd web && npm run build && cd .. && npm run build && cp web/dist dist/web",
     "copyDistToWebFolder:windows": "xcopy /E .\\web\\dist .\\dist\\web",

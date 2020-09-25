@@ -6,9 +6,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "install:all": "npm i && cd web && npm i",
     "prebuild": "rimraf dist",
     "build:windows": "npm run prebuild && nest build && mkdir .\\dist\\web && npm run copyDistToWebFolder:windows",
-    "build:complete": "cd web && npm run builds && cd .. && npm run build && cp web/dist dist/web",
+    "build:complete": "cd web && npm run build && cd .. && npm run build && cp web/dist dist/web",
     "copyDistToWebFolder:windows": "xcopy /E .\\web\\dist .\\dist\\web",
     "copyDistToWebFolder:linux": "cp -R ./web/dist ./dist/web",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

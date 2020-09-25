@@ -12,20 +12,26 @@ You can manually download the lates version of the server from [here](https://gi
 
 ```bash
 # Downloading the app
-$ git clone https://github.com/robertojmm/mein-manga.git && cd mein-manga
+$ git clone --recurse-submodules git@github.com:robertojmm/mein-manga.git
 
 # Installing dependencies
-$ npm install
+$ npm run install:all
+
+# Build WebApp
+$ cd web && npm run build
+
+# Build Server
+$ cd .. && npm run build:windows (or linux)
 ```
 :exclamation:
 :exclamation:
- Don't forget to edit src/env.ts with your credentials
+ Don't forget to edit `src/env.ts` with your credentials
 :exclamation:
 :exclamation:
 
 :exclamation:
 :exclamation:
- Don't forget to change folder paths in dist/settings.json once you executed the app
+ Don't forget to change folder paths in `dist/settings.json` once you executed the app
 :exclamation:
 :exclamation:
 

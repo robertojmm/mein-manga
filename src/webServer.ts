@@ -13,7 +13,7 @@ class WebServer {
     this.app = express();
     this.port = env.WEB_APP_PORT;
 
-    this.clientFolder = settings.get('WEB_APP_FOLDER');
+    this.clientFolder = settings.get('WEB_FOLDER');
 
     this.app.use(express.static(this.clientFolder));
 

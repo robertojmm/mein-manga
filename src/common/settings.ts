@@ -1,14 +1,16 @@
 import * as Configstore from 'configstore';
 
 const APPFOLDER = `${__dirname}/../../../mein-manga_data`;
+const WEB_FOLDER = `${__dirname}/../../web/dist`;
 const STATIC_FOLDER = `${APPFOLDER}/static`;
+console.log(`WEB FOLDER: ${WEB_FOLDER}`);
 
 const settings = new Configstore(
   'mein-manga',
   {
     APPFOLDER,
+    WEB_FOLDER,
     MANGA_FOLDER: `${APPFOLDER}/mangas`,
-    WEB_APP_FOLDER: `${APPFOLDER}/webApp`,
     STATIC_FOLDER,
     READING_FOLDER: `${STATIC_FOLDER}/reading`,
     MANGA_COVERS_FOLDER: `${STATIC_FOLDER}/manga_covers`,

@@ -4,7 +4,7 @@
 
 ## Description
 
-Mein-Manga is an individual and comfortable comic/manga reader
+Mein-Manga is an individual and comfortable comic/manga web reader. Enjoy reading on your computer as well as your phone.
 
 ## Installation
 
@@ -54,6 +54,6 @@ Control + A, then Control + D
 ```
 
 
-## License
+## 📜 License
 
 Mein-Manga and Nest are [MIT licensed](LICENSE).

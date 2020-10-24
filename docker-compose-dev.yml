@@ -1,0 +1,28 @@
+version: '3'
+
+services: 
+    manga-dev:
+        build: 
+            context: .
+            target: development
+            dockerfile: Dockerfile
+        container_name: manga-dev
+        volumes: 
+            - .:/opt/mein-manga
+            - /opt/mein-manga/mein-manga_data
+            - ./mein-manga_data:/opt/mein-manga_data
+        ports: 
+               - 3000:3000
+               - 8080:8080        
+    
+    mysql:
+        image: mysql:5.6
+        container_name: manga-mysql
+        environment: 
+            MYSQL_DATABASE: Mein-Manga
+            MYSQL_USER: username
+            MYSQL_PASSWORD: pass
+            MYSQL_ROOT_PASSWORD: pass
+        ports:
+            - "3306:3306"
+        restart: always

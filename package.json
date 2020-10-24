@@ -6,6 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "start-docker:dev:build":"sudo docker-compose -f docker-compose-dev.yml up --build",
+    "start-docker:dev":"sudo docker-compose -f docker-compose-dev.yml up",
     "install:all": "npm i && cd web && npm i",
     "prebuild": "rimraf dist",
     "build:linux": "npm run prebuild && nest build && mkdir ./dist/web && npm run copyDistToWebFolder:linux",

@@ -34,3 +34,7 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+#Docker
+/mein-manga_data/static
+/mein-manga_data/mangas
